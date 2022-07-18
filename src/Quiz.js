@@ -41,11 +41,12 @@ class Question{
 
 
 function Quiz() {
-    let {qid} = useParams(); // quiz id
+    let {qid,pid} = useParams(); // quiz id
     const [open, setOpen] = React.useState(false);
     const [startQuiz,setStartQuiz] = React.useState(false);
     const navigate = useNavigate();
     const [userName,setUserName] = React.useState('');
+    const [p_id,setPID] = React.useState('n')
     const [quizTitle,setQuizTitle] = React.useState("");
     const [quizDuration,setQuizDuration] = React.useState(1658299923247);
     const [questionList,setQuestoinList] = React.useState([]);
@@ -57,7 +58,7 @@ function Quiz() {
     const [showTimeUp,setShowTimesUp] = React.useState(false);
 
     const [selectedOptionsArray,setSelectedOptionArray] = React.useState(['','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','']) 
-
+    const [myAnwerArray,setMyAnswerArray] = React.useState([0,0,0,0,0,0,0,0,0]);
     const Ref = useRef(null);
     const [timer, setTimer] = useState('00:00:00');
     const getTimeRemaining = (e) => {
@@ -87,7 +88,7 @@ function Quiz() {
         }
     }
     const clearTimer = (e) => { 
-        setTimer('00:00:10');
+        setTimer('00:00:00');
         if (Ref.current) clearInterval(Ref.current);
         const id = setInterval(() => {
             startTimer(e);
@@ -109,17 +110,20 @@ function Quiz() {
     
 
     React.useEffect(()=>{
-        console.log("selectedoption array changed",selectedOptionsArray);
         var temp = 0;
-        console.log("your score should be zero: ",score);
+        var len = questionList.length
+        const arr = new Array(len).fill(0);
         questionList.map((value,idx)=>{
             console.log(value.answer,selectedOptionsArray[idx]);
             if (value.answer===selectedOptionsArray[idx]){
+                arr[idx] = 1;
                 temp = temp+1;
+            }else{
+                arr[idx] = 0;
             }
         })
+        setMyAnswerArray(arr);
         setScore(temp);
-        
     },[selectedOptionsArray])
     React.useEffect(()=>{
         console.log(qid);
@@ -157,8 +161,10 @@ function Quiz() {
     },[]);
 
     async function uploadScore(){
-        await setDoc(doc(db,'quizes',qid,'Participants',userName),{
-            Score: score
+        await setDoc(doc(db,'quizes',qid,'Participants',p_id),{
+            Score: score,
+            Name: userName,
+            Answers: myAnwerArray,
         });
     }
 
@@ -207,15 +213,28 @@ function Quiz() {
         if (userName===''){
             alert("user name can not be empty");
         }else{
-            const docRef = doc(db, "quizes", qid,"Participants",userName);
+            if (pid==="n"){
+                setPID(userName);
+                console.log("pid changed from n to ",userName);
+            }
+            else{
+                setPID(pid);
+            }
+            var temp = pid==="n" ? userName : pid;
+            console.log(temp);
+            const docRef = doc(db, "quizes", qid,"Participants",temp);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()){
-                alert('try using different name');
+                if (p_id===userName)alert('try using different name');
+                else alert("You have already given the quiz");
             }else{
                 await setDoc(docRef,{
-                    Score:0
+                    Score:0,
+                    Name: userName,
+                    Answers: [],
                 })
                 setStartQuiz(true);
+                
                 clearTimer(getDeadTime());
             }
         }
@@ -286,7 +305,7 @@ function Quiz() {
                                     <h1>Loading</h1>
                                 ) : (
                                     <>
-                                        <Pagination page={currentQues}  count={questionList.length} onChange={handlePagerChange} sx={{}} />
+                                        <Pagination page={currentQues}  count={questionList.length} onChange={handlePagerChange} />
                                         <Paper elevation={4} sx={{width:'100%', marginTop:'30px'}}>
                                             <form onSubmit={handleNext}>
                                                 <FormControl sx={{ m: 3 }} variant="standard">

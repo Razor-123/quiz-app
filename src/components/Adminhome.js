@@ -16,20 +16,10 @@ import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import { Grid } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import cryptoRandomString from 'crypto-random-string';
 
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  display:'flex',
-};
 
 class QuizDetails{
   constructor(quiz_title,quiz_duration){
@@ -45,7 +35,6 @@ function Adminhome() {
   const [quizes_id_list,setQuizesIdList] = React.useState([]);
   const [quiz_list,setQuizList] = React.useState([]);
   const [open, setOpen] = React.useState(false);
-  const handleClose = () => setOpen(false);
   
   
 
@@ -60,6 +49,7 @@ function Adminhome() {
 
     //return () => unsub();
   },[]);
+  
   React.useEffect(()=>{
     setQuizList([]);
     // test
@@ -90,6 +80,9 @@ function Adminhome() {
       alert(err);
     })
   }
+  function home_clicked(){
+    navigate('/');
+  }
   return (
     <div >
         <Box sx={{ flexGrow: 1 }}>
@@ -98,6 +91,7 @@ function Adminhome() {
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 Admin Home
               </Typography>
+              <Button color="inherit" onClick={home_clicked}>Home</Button>
               <Button color="inherit" onClick={logout_clicked}>Logout</Button>
             </Toolbar>
           </AppBar>
@@ -120,7 +114,7 @@ function Adminhome() {
               <ListItem sx={{ boxShadow: 2,marginTop:"10px"}}
                   secondaryAction={
                     <div>
-                      <IconButton title='Copy Link' onClick={()=>{navigator.clipboard.writeText("localhost:3000/quiz/"+quizes_id_list[idx])}} edge="end" aria-label="delete">
+                      <IconButton title='Copy Link' onClick={()=>{navigator.clipboard.writeText(window.location.origin.toString()+'/quiz/'+quizes_id_list[idx]+"/n")}} edge="end" aria-label="delete">
                         <ContentCopyIcon sx={{ padding:"10px" }}/>
                       </IconButton>
                       <Link to={{pathname: `/admin/result/${quizes_id_list[idx]}`}} target="_blank">
@@ -128,6 +122,9 @@ function Adminhome() {
                           <AssessmentIcon sx={{ padding:"10px" }}/>
                         </IconButton>
                       </Link>
+                      <IconButton  title='Special Link' onClick={()=>navigator.clipboard.writeText( window.location.origin.toString()+'/quiz/'+quizes_id_list[idx]+"/"+cryptoRandomString({length: 20}) )} edge="end" aria-label="show">
+                          <VisibilityIcon sx={{ padding:"10px" }}/>
+                      </IconButton>
                       
                     </div>
                 }

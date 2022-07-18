@@ -7,11 +7,12 @@ import Button from '@mui/material/Button';
 function EnterUrl() {
     const [url,setUrl] = useState('');
     const navigate = useNavigate();
+    console.log(window.location.origin)
     function urlchangehandle(event){
         setUrl(event.target.value);
     }
     function enterQuizClicked(){
-        navigate('/'+url.replace("http://localhost:3000/",""));
+        navigate('/'+url.replace(window.location.origin.toString()+'/',""));
     }
     return (
         <div>

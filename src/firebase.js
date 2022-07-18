@@ -53,12 +53,14 @@ const logInWithEmailAndPassword = async (email, password) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (err) {
-    console.error(err);
-    alert(err.message);
+    console.log(err);
+    if (err.message=="Firebase: Error (auth/user-not-found).")alert("No user found")
+    else if (err.message=="Firebase: Error (auth/invalid-email).")alert("Invalid Email")
+    else alert(err.message);
   }
 };
 
-const registerWithEmailAndPassword = async (name, email, password) => {
+const registerWithEmailAndPassword = async (email, password) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;
@@ -68,7 +70,10 @@ const registerWithEmailAndPassword = async (name, email, password) => {
     })
   } catch (err) {
     console.error(err);
-    alert(err.message);
+    if (err.message=="Firebase: Error (auth/invalid-email).")alert("Invalid Email");
+    else if (err.message=="Firebase: Password should be at least 6 characters (auth/weak-password).")
+      alert("Password should be at least 6 characters");
+    else alert(err.message);
   }
 };
 
@@ -78,7 +83,8 @@ const sendPasswordReset = async (email) => {
     alert("Password reset link sent!");
   } catch (err) {
     console.error(err);
-    alert(err.message);
+    if (err.message=="Firebase: Error (auth/user-not-found).")alert("no user found");
+    else alert(err.message);
   }
 };
 

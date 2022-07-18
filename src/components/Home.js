@@ -26,7 +26,7 @@ function Home(){
                             </Link>
                             <br/><br/>
                             <Link to="/login" style={{ textDecoration: 'none' }}>
-                                <Button size='large' variant="outlined">Create quiz</Button>
+                                <Button size='large' variant="outlined">Admin</Button>
                             </Link>
                     </center>
                 </MuiThemeProvider>

@@ -29,7 +29,7 @@ function App() {
         <Route path="/admin/result/:qid" element={<Result />} />
         <Route path="/admin" element={<Adminhome />} />
         <Route path="/enterurl" element={<EnterUrl />} />
-        <Route path="/quiz/:qid" element={<Quiz />} />
+        <Route path="/quiz/:qid/:pid" element={<Quiz />} />
         <Route exact path="/register" element={<Register />} />
           <Route exact path="/reset" element={<Reset />} />
       </Routes>

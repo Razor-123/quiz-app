@@ -57,8 +57,6 @@ function CreateQuiz() {
     const [activeStep, setActiveStep] = React.useState(0);
 
     const [title,setTitle] = React.useState("");
-    const [startTime, setStartTime] = React.useState(new Date());
-    const [endTime,setEndTime] = React.useState(new Date());
     const [quizDuration,setQuizDuration] = React.useState(0);
     const textInput1 = React.useRef(null);
     const textInput2 = React.useRef(null);
