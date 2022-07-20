@@ -12,13 +12,7 @@ import { initializeApp } from "firebase/app";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAKPTfTm__5qYmRyWDfCNav7Pbz42Cd-ZU",
-    authDomain: "quiz-app-d91fa.firebaseapp.com",
-    projectId: "quiz-app-d91fa",
-    storageBucket: "quiz-app-d91fa.appspot.com",
-    messagingSenderId: "1030060068374",
-    appId: "1:1030060068374:web:aa8ba4d3aa71865952ef37",
-    measurementId: "G-2VWMYNM9L2"
+    // deleted config for privacy
   };
 
 const app = initializeApp(firebaseConfig);
